@@ -21,30 +21,30 @@ export const defaultMaxResponseTurns = Number(
   process.env.NEXT_PUBLIC_CUA_DEFAULT_MAX_RESPONSE_TURNS ?? "24",
 ) as ResponseTurnBudget;
 export const engineHelpText =
-  "Native drives the browser runtime directly for clicks, drags, typing, and screenshots. Code uses a persistent Playwright REPL for scripted browser control.";
+  "ネイティブはブラウザランタイムをクリック、ドラッグ、タイピング、スクリーンショットに直接操作します。コードはスクリプト化されたブラウザ制御のために永続的な Playwright REPL を使用します。";
 export const browserHelpText =
-  "Headless runs the browser off-screen. Visible opens the browser window so you can watch the session live as it runs.";
+  "ヘッドレスはブラウザをオフスクリーンで実行します。表示ありはブラウザウィンドウを開き、セッションをライブで監視できます。";
 export const turnBudgetHelpText =
-  "Caps how many model turns the runner can use before stopping the run. Higher budgets allow longer plans but take more time.";
+  "実行を停止するまでにランナーが使用できるモデルターン数を制限します。予算が高いほど長い計画が可能ですが、時間がかかります。";
 export const verificationHelpText =
-  "Runs the scenario's built-in checks after the model stops. Leave this off to treat the model's completed action loop as the success condition.";
+  "モデルが停止した後にシナリオの組み込みチェックを実行します。モデルの完了したアクションループを成功条件として扱う場合はオフにしてください。";
 export const runnerUnavailableHint =
-  "Start `pnpm dev` or `OPENAI_API_KEY=... pnpm dev:runner`, then refresh the page.";
+  "`pnpm dev` または `OPENAI_API_KEY=... pnpm dev:runner` を起動してからページを更新してください。";
 
 function titleForIssueCode(code: string) {
   switch (code) {
     case "runner_unavailable":
-      return "Runner unavailable";
+      return "ランナー利用不可";
     case "missing_api_key":
-      return "Runner missing API key";
+      return "ランナー API キー未設定";
     case "live_mode_unavailable":
-      return "Live mode unavailable";
+      return "ライブモード利用不可";
     case "unsupported_safety_acknowledgement":
-      return "Safety acknowledgement unavailable";
+      return "安全確認利用不可";
     case "run_already_active":
-      return "Run already active";
+      return "実行中です";
     case "invalid_request":
-      return "Invalid request";
+      return "不正なリクエスト";
     default:
       return humanizeToken(code);
   }
@@ -53,7 +53,7 @@ function titleForIssueCode(code: string) {
 export function formatClock(value: string) {
   const date = new Date(value);
 
-  return date.toLocaleTimeString("en-US", {
+  return date.toLocaleTimeString("ja-JP", {
     hour12: false,
     hour: "2-digit",
     minute: "2-digit",
@@ -100,8 +100,8 @@ export function createRunnerUnavailableIssue(detail?: string) {
   return createRunnerIssue(
     "runner_unavailable",
     detail
-      ? `The operator console could not reach the runner. ${detail}`
-      : "The operator console could not reach the runner.",
+      ? `オペレーターコンソールがランナーに接続できませんでした。${detail}`
+      : "オペレーターコンソールがランナーに接続できませんでした。",
     runnerUnavailableHint,
   );
 }
@@ -112,7 +112,7 @@ export function deriveRunFailureIssue(runDetail: RunDetail | null) {
   }
 
   const notes = runDetail.run.summary?.notes ?? [];
-  const message = notes[0] ?? "Run failed during execution.";
+  const message = notes[0] ?? "実行中に失敗しました。";
   const code = notes.find((note) => note.startsWith("Error code: "))?.slice(12);
   const hint = notes.find((note) => note.startsWith("Hint: "))?.slice(6);
 
@@ -121,7 +121,7 @@ export function deriveRunFailureIssue(runDetail: RunDetail | null) {
 
 export function scenarioTargetDisplay(scenario: ScenarioManifest | null) {
   if (!scenario) {
-    return "Runner unavailable";
+    return "ランナー利用不可";
   }
 
   return scenario.startTarget.kind === "remote_url"
@@ -220,22 +220,22 @@ function parseToolPayload(detail: string | undefined) {
 function describeToolCall(label: string, payload: Record<string, unknown>) {
   switch (label) {
     case "exec_js":
-      return "Run browser script";
+      return "ブラウザスクリプト実行";
     default:
       return Object.keys(payload).length > 0
         ? humanizeToken(label)
-        : "Tool requested";
+        : "ツールリクエスト";
   }
 }
 
 function summarizeToolCall(label: string, payload: Record<string, unknown>) {
   switch (label) {
     case "exec_js":
-      return "Model is using the browser runtime directly.";
+      return "モデルがブラウザランタイムを直接使用しています。";
     default:
       return Object.keys(payload).length > 0
         ? JSON.stringify(payload)
-        : "Model requested a workspace helper tool.";
+        : "モデルがワークスペースヘルパーツールをリクエストしました。";
   }
 }
 
@@ -253,22 +253,22 @@ function summarizeComputerAction(action: Record<string, unknown>) {
 
   switch (type) {
     case "click":
-      return `Click${formatCoordinate(action.x, action.y)}`;
+      return `クリック${formatCoordinate(action.x, action.y)}`;
     case "double_click":
-      return `Double-click${formatCoordinate(action.x, action.y)}`;
+      return `ダブルクリック${formatCoordinate(action.x, action.y)}`;
     case "drag":
-      return "Drag";
+      return "ドラッグ";
     case "move":
-      return `Move pointer${formatCoordinate(action.x, action.y)}`;
+      return `ポインター移動${formatCoordinate(action.x, action.y)}`;
     case "scroll": {
       const deltaY = Number(action.delta_y ?? action.deltaY ?? action.scroll_y);
 
       if (!Number.isFinite(deltaY) || deltaY === 0) {
-        return "Scroll";
+        return "スクロール";
       }
 
-      return `Scroll ${Math.abs(Math.round(deltaY))} px ${
-        deltaY > 0 ? "down" : "up"
+      return `スクロール ${Math.abs(Math.round(deltaY))} px ${
+        deltaY > 0 ? "下" : "上"
       }`;
     }
     case "type": {
@@ -276,7 +276,7 @@ function summarizeComputerAction(action: Record<string, unknown>) {
       const preview =
         text.length > 28 ? `${text.slice(0, 25).trimEnd()}...` : text;
 
-      return preview ? `Type "${preview}"` : "Type text";
+      return preview ? `入力 "${preview}"` : "テキスト入力";
     }
     case "keypress": {
       const keys = Array.isArray(action.keys)
@@ -285,21 +285,21 @@ function summarizeComputerAction(action: Record<string, unknown>) {
           ? [action.key]
           : [];
 
-      return keys.length > 0 ? `Press ${keys.join(" + ")}` : "Press key";
+      return keys.length > 0 ? `キー押下 ${keys.join(" + ")}` : "キー押下";
     }
     case "wait": {
       const durationMs = Number(action.ms ?? action.duration_ms ?? 1_000);
 
       if (!Number.isFinite(durationMs)) {
-        return "Wait";
+        return "待機";
       }
 
       return durationMs >= 1_000
-        ? `Wait ${(durationMs / 1_000).toFixed(1)} s`
-        : `Wait ${Math.round(durationMs)} ms`;
+        ? `待機 ${(durationMs / 1_000).toFixed(1)} 秒`
+        : `待機 ${Math.round(durationMs)} ms`;
     }
     case "screenshot":
-      return "Capture screenshot";
+      return "スクリーンショット撮影";
     default:
       return humanizeToken(type);
   }
@@ -329,7 +329,7 @@ function parseActionBatchDetail(detail: string | undefined) {
       detail: JSON.stringify(actions, null, 2),
       preview:
         actions.map((action) => summarizeComputerAction(action)).join(" • ") ||
-        "No browser actions",
+        "ブラウザアクションなし",
     };
   } catch {
     return null;
@@ -371,7 +371,7 @@ export function mapRunEventToActivity(
         createdAt: event.createdAt,
         ...withOptionalDetail(event.detail),
         family: "system",
-        headline: "Run started",
+        headline: "実行開始",
         key: `activity-${event.id}`,
         level: event.level,
         summary: event.detail ?? event.message,
@@ -382,7 +382,7 @@ export function mapRunEventToActivity(
         createdAt: event.createdAt,
         ...withOptionalDetail(event.detail),
         family: "system",
-        headline: "Workspace ready",
+        headline: "ワークスペース準備完了",
         key: `activity-${event.id}`,
         level: event.level,
         summary: event.detail ?? event.message,
@@ -393,7 +393,7 @@ export function mapRunEventToActivity(
         createdAt: event.createdAt,
         ...withOptionalDetail(event.detail),
         family: "system",
-        headline: "Lab runtime started",
+        headline: "ラボランタイム開始",
         key: `activity-${event.id}`,
         level: event.level,
         summary: event.detail ?? event.message,
@@ -404,7 +404,7 @@ export function mapRunEventToActivity(
         createdAt: event.createdAt,
         ...withOptionalDetail(event.detail),
         family: "observe",
-        headline: "Browser session started",
+        headline: "ブラウザセッション開始",
         key: `activity-${event.id}`,
         level: event.level,
         summary: event.detail ?? event.message,
@@ -415,7 +415,7 @@ export function mapRunEventToActivity(
         createdAt: event.createdAt,
         ...withOptionalDetail(event.detail),
         family: "observe",
-        headline: "Navigation",
+        headline: "ナビゲーション",
         key: `activity-${event.id}`,
         level: event.level,
         summary: event.detail ? formatUrlLabel(event.detail) : event.message,
@@ -433,7 +433,7 @@ export function mapRunEventToActivity(
         family: "tool",
         headline: parsedPayload
           ? describeToolCall(parsedPayload.label, parsedPayload.payload)
-          : "Tool requested",
+          : "ツールリクエスト",
         key: `activity-${event.id}`,
         level: event.level,
         summary: parsedPayload
@@ -447,8 +447,8 @@ export function mapRunEventToActivity(
         ...withOptionalDetail(event.detail),
         family: "tool",
         headline: event.detail
-          ? `${humanizeToken(event.detail)} complete`
-          : "Tool completed",
+          ? `${humanizeToken(event.detail)} 完了`
+          : "ツール完了",
         key: `activity-${event.id}`,
         level: event.level,
         summary: event.message,
@@ -459,7 +459,7 @@ export function mapRunEventToActivity(
         createdAt: event.createdAt,
         ...withOptionalDetail(parsedActionBatch?.detail ?? event.detail),
         family: "action",
-        headline: "Browser action batch queued",
+        headline: "ブラウザアクションバッチ待機",
         key: `activity-${event.id}`,
         level: event.level,
         summary: parsedActionBatch?.preview ?? event.message,
@@ -470,7 +470,7 @@ export function mapRunEventToActivity(
         createdAt: event.createdAt,
         ...withOptionalDetail(parsedActionBatch?.detail ?? event.detail),
         family: "action",
-        headline: "Browser action batch executed",
+        headline: "ブラウザアクションバッチ実行",
         key: `activity-${event.id}`,
         level: event.level,
         summary: parsedActionBatch?.preview ?? event.message,
@@ -494,7 +494,7 @@ export function mapRunEventToActivity(
             : event.detail,
         ),
         family: "snapshot",
-        headline: "Browser frame captured",
+        headline: "ブラウザフレームキャプチャ",
         key: `activity-${event.id}`,
         level: event.level,
         ...(relatedScreenshot ? { screenshotId: relatedScreenshot.id } : {}),
@@ -522,8 +522,8 @@ export function mapRunEventToActivity(
         ),
         family: "snapshot",
         headline: relatedScreenshot
-          ? `Captured ${humanizeToken(relatedScreenshot.label)}`
-          : "Screenshot captured",
+          ? `${humanizeToken(relatedScreenshot.label)} を撮影`
+          : "スクリーンショット撮影",
         key: `activity-${event.id}`,
         level: event.level,
         ...(relatedScreenshot ? { screenshotId: relatedScreenshot.id } : {}),
@@ -537,7 +537,7 @@ export function mapRunEventToActivity(
         createdAt: event.createdAt,
         ...withOptionalDetail(event.detail),
         family: "verify",
-        headline: "Verification completed",
+        headline: "検証完了",
         key: `activity-${event.id}`,
         level: event.level,
         summary: event.detail ?? event.message,
@@ -548,7 +548,7 @@ export function mapRunEventToActivity(
         createdAt: event.createdAt,
         ...withOptionalDetail(event.detail),
         family: "system",
-        headline: "Run completed",
+        headline: "実行完了",
         key: `activity-${event.id}`,
         level: event.level,
         summary: event.message,
@@ -559,7 +559,7 @@ export function mapRunEventToActivity(
         createdAt: event.createdAt,
         ...withOptionalDetail(event.detail),
         family: "system",
-        headline: "Run failed",
+        headline: "実行失敗",
         key: `activity-${event.id}`,
         level: event.level,
         summary: event.detail ?? event.message,
@@ -570,7 +570,7 @@ export function mapRunEventToActivity(
         createdAt: event.createdAt,
         ...withOptionalDetail(event.detail),
         family: "system",
-        headline: "Run cancelled",
+        headline: "実行キャンセル",
         key: `activity-${event.id}`,
         level: event.level,
         summary: event.detail ?? event.message,
@@ -633,18 +633,18 @@ export function mapManualTranscriptToActivity(entry: TranscriptEntry): ActivityI
 export function activityFamilyLabel(family: ActivityItem["family"]) {
   switch (family) {
     case "action":
-      return "Act";
+      return "操作";
     case "observe":
-      return "Observe";
+      return "観察";
     case "operator":
-      return "Operator";
+      return "オペレーター";
     case "snapshot":
-      return "Snapshot";
+      return "スナップショット";
     case "tool":
-      return "Tool";
+      return "ツール";
     case "verify":
-      return "Verify";
+      return "検証";
     default:
-      return "System";
+      return "システム";
   }
 }

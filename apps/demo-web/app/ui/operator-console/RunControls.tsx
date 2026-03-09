@@ -105,7 +105,7 @@ export function RunActionButtons({
         onClick={() => void onStartRun()}
         type="button"
       >
-        {pendingAction === "start" ? "Starting..." : "Start Run"}
+        {pendingAction === "start" ? "起動中..." : "実行開始"}
       </button>
       <button
         className="secondaryButton"
@@ -113,7 +113,7 @@ export function RunActionButtons({
         onClick={() => void onStopRun()}
         type="button"
       >
-        {pendingAction === "stop" ? "Stopping..." : "Stop"}
+        {pendingAction === "stop" ? "停止中..." : "停止"}
       </button>
       <button
         className="secondaryButton"
@@ -121,7 +121,7 @@ export function RunActionButtons({
         onClick={() => void onResetWorkspace()}
         type="button"
       >
-        {pendingAction === "reset" ? "Resetting..." : "Reset Workspace"}
+        {pendingAction === "reset" ? "リセット中..." : "ワークスペースリセット"}
       </button>
     </div>
   );
@@ -148,12 +148,12 @@ export function RunControls({
   return (
     <aside className="panel controlsPanel">
       <div className="controlsHeader">
-        <h2>Controls</h2>
+        <h2>コントロール</h2>
       </div>
 
       <div className="controlsGrid">
         <div className="railField scenarioField">
-          <label htmlFor="scenario-select">Scenario</label>
+          <label htmlFor="scenario-select">シナリオ</label>
           <select
             disabled={controlsLocked}
             id="scenario-select"
@@ -169,12 +169,12 @@ export function RunControls({
         </div>
 
         <div className="railField promptField">
-          <label htmlFor="run-prompt">Run prompt</label>
+          <label htmlFor="run-prompt">実行プロンプト</label>
           <textarea
             disabled={controlsLocked}
             id="run-prompt"
             onChange={(event) => onPromptChange(event.target.value)}
-            placeholder="Describe the operator task for GPT-5.4."
+            placeholder="GPT-5.4 のオペレータータスクを記述してください。"
             rows={5}
             value={prompt}
           />
@@ -184,9 +184,9 @@ export function RunControls({
       <details className="advancedPanel">
         <summary>
           <span className="advancedSummaryCopy">
-            <span className="advancedLabel">Advanced settings</span>
+            <span className="advancedLabel">詳細設定</span>
             <span className="advancedHint">
-              Engine, browser, verification, and turn budget
+              エンジン、ブラウザ、検証、ターン予算
             </span>
           </span>
         </summary>
@@ -194,20 +194,20 @@ export function RunControls({
         <div className="advancedContent">
           <div className="railField">
             <div className="fieldLabel">
-              <span>Engine</span>
+              <span>エンジン</span>
               <InfoPopover
                 id="engine-help-popover"
-                label="Engine"
+                label="エンジン"
                 text={engineHelpText}
               />
             </div>
             <SegmentControl
-              ariaLabel="Execution mode"
+              ariaLabel="実行モード"
               disabled={controlsLocked}
               onChange={onModeChange}
               options={[
-                { label: "Code", value: "code" },
-                { label: "Native", value: "native" },
+                { label: "コード", value: "code" },
+                { label: "ネイティブ", value: "native" },
               ]}
               value={mode}
             />
@@ -215,20 +215,20 @@ export function RunControls({
 
           <div className="railField">
             <div className="fieldLabel">
-              <span>Browser</span>
+              <span>ブラウザ</span>
               <InfoPopover
                 id="browser-help-popover"
-                label="Browser"
+                label="ブラウザ"
                 text={browserHelpText}
               />
             </div>
             <SegmentControl
-              ariaLabel="Browser mode"
+              ariaLabel="ブラウザモード"
               disabled={controlsLocked}
               onChange={onBrowserModeChange}
               options={[
-                { label: "Headless", value: "headless" },
-                { label: "Visible", value: "headful" },
+                { label: "ヘッドレス", value: "headless" },
+                { label: "表示あり", value: "headful" },
               ]}
               value={browserMode}
             />
@@ -236,10 +236,10 @@ export function RunControls({
 
           <div className="railField budgetField">
             <div className="fieldLabel">
-              <label htmlFor="turn-budget">Turn budget</label>
+              <label htmlFor="turn-budget">ターン予算</label>
               <InfoPopover
                 id="turn-budget-help-popover"
-                label="Turn budget"
+                label="ターン予算"
                 text={turnBudgetHelpText}
               />
             </div>
@@ -258,16 +258,16 @@ export function RunControls({
                 type="range"
                 value={maxResponseTurns}
               />
-              <span className="budgetValue">{maxResponseTurns} turns</span>
+              <span className="budgetValue">{maxResponseTurns} ターン</span>
             </div>
           </div>
 
           <div className="railField">
             <div className="fieldLabel">
-              <span>Verification</span>
+              <span>検証</span>
               <InfoPopover
                 id="verification-help-popover"
-                label="Verification"
+                label="検証"
                 text={verificationHelpText}
               />
             </div>
@@ -278,7 +278,7 @@ export function RunControls({
                 onChange={(event) => onVerificationEnabledChange(event.target.checked)}
                 type="checkbox"
               />
-              Run verification checks
+              検証チェックを実行
             </label>
           </div>
         </div>

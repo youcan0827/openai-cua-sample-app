@@ -59,12 +59,12 @@ export function OperatorConsole({
     scenarios,
   });
 
-  const selectedScenarioTitle = selectedScenario?.title ?? "Selected app";
+  const selectedScenarioTitle = selectedScenario?.title ?? "選択中のアプリ";
   const stageUrl =
     selectedBrowser?.currentUrl ??
     (selectedRun
       ? scenarioTargetDisplay(selectedScenario)
-      : "Awaiting app launch");
+      : "アプリ起動待ち");
   const startDisabled =
     !runnerOnline ||
     !selectedScenario ||
@@ -81,55 +81,55 @@ export function OperatorConsole({
   const issueMessage = currentIssue ? formatRunnerIssueMessage(currentIssue) : null;
   const stageHeadline = selectedRun
     ? selectedRun.run.status === "running"
-      ? "Run active"
+      ? "実行中"
       : selectedRun.run.status === "completed"
-        ? "Run completed"
+        ? "実行完了"
         : selectedRun.run.status === "cancelled"
-          ? "Run cancelled"
-          : currentIssue?.title ?? "Run failed"
+          ? "実行キャンセル"
+          : currentIssue?.title ?? "実行失敗"
     : matchingWorkspaceState
-      ? "Workspace reset"
+      ? "ワークスペースリセット完了"
       : currentIssue
         ? currentIssue.title
         : runnerOnline
-          ? "Idle, ready"
-          : "Runner offline";
+          ? "待機中"
+          : "ランナーオフライン";
   const stageSupportCopy = selectedRun
     ? selectedRun.run.status === "failed"
       ? issueMessage
       : null
     : matchingWorkspaceState
-      ? `Mutable workspace copied to ${matchingWorkspaceState.workspacePath} at ${formatClock(
+      ? `変更可能なワークスペースを ${matchingWorkspaceState.workspacePath} に ${formatClock(
           matchingWorkspaceState.resetAt,
-        )}.`
+        )} でコピーしました。`
       : currentIssue
         ? issueMessage
         : runnerOnline
-        ? "Start a run to open the selected lab and stream activity into this console."
+        ? "実行を開始すると選択したラボが開き、アクティビティがこのコンソールにストリームされます。"
         : issueMessage;
   const topbarSubtitle = selectedRun
-    ? `Reviewing ${selectedScenarioTitle}`
-    : "Run, inspect, and review browser tasks.";
+    ? `${selectedScenarioTitle} をレビュー中`
+    : "ブラウザタスクを実行、検査、レビュー。";
   const emptyReviewMessage = selectedRun
     ? selectedRun.run.status === "running"
-      ? "The run is active. The first captured frame will appear here shortly."
+      ? "実行中です。最初のキャプチャフレームがまもなくここに表示されます。"
       : selectedRun.run.status === "failed"
-        ? issueMessage ?? "The run failed before a screenshot was captured."
-        : "This run finished without a captured browser frame."
+        ? issueMessage ?? "スクリーンショットが撮影される前に実行が失敗しました。"
+        : "この実行はブラウザフレームのキャプチャなしに終了しました。"
     : currentIssue
       ? issueMessage ?? currentIssue.error
       : runnerOnline
-        ? "Start a run to begin reviewing captured frames."
-        : issueMessage ?? "Runner is unavailable.";
+        ? "実行を開始してキャプチャフレームのレビューを始めてください。"
+        : issueMessage ?? "ランナーは利用できません。";
   const emptyTimelineMessage = selectedRun
     ? selectedRun.run.status === "failed"
-      ? issueMessage ?? "The run ended before any captures were saved."
-      : "Captured frames will appear here as the run progresses."
+      ? issueMessage ?? "キャプチャが保存される前に実行が終了しました。"
+      : "実行が進むにつれてキャプチャフレームがここに表示されます。"
     : currentIssue
       ? issueMessage ?? currentIssue.error
       : runnerOnline
-        ? "Captured frames will appear here once the run starts."
-        : issueMessage ?? "Runner is unavailable.";
+        ? "実行が開始するとキャプチャフレームがここに表示されます。"
+        : issueMessage ?? "ランナーは利用できません。";
 
   return (
     <main className="consoleShell">

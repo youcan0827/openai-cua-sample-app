@@ -22,14 +22,14 @@ export function ConsoleTopbar({
           <strong>5.4</strong>
         </div>
         <div className="brandCopy">
-          <h1>GPT-5.4 CUA Sample App</h1>
+          <h1>GPT-5.4 CUA サンプルアプリ</h1>
           <p>{topbarSubtitle}</p>
         </div>
       </div>
       <div className="statusCluster">
         <div className={`statusPill ${runnerOnline ? "ok" : "error"}`}>
           <span className="statusDot" />
-          {runnerOnline ? "Runner Online" : "Runner Offline"}
+          {runnerOnline ? "ランナー稼働中" : "ランナー停止中"}
         </div>
       </div>
     </header>

@@ -36,10 +36,9 @@ export function ActivityFeed({
     <section className="railActivity">
       <div className="feedHeader">
         <div className="feedHeaderCopy">
-          <h2>Agent activity</h2>
+          <h2>エージェントアクティビティ</h2>
           <p>
-            Watch tool calls, browser actions, screenshots, and optional
-            verification stream in real time.
+            ツール呼び出し、ブラウザ操作、スクリーンショット、オプションの検証ストリームをリアルタイムで監視します。
           </p>
         </div>
         <div className="feedActions">
@@ -49,7 +48,7 @@ export function ActivityFeed({
               onClick={onJumpToLatestActivity}
               type="button"
             >
-              Jump to live
+              最新へジャンプ
             </button>
           ) : null}
           <label className="feedToggle">
@@ -58,7 +57,7 @@ export function ActivityFeed({
               onChange={(event) => onStreamLogsChange(event.target.checked)}
               type="checkbox"
             />
-            Stream {activityFeedLabel}
+            ストリーム: {activityFeedLabel}
           </label>
         </div>
       </div>
@@ -70,10 +69,9 @@ export function ActivityFeed({
       >
         {activityItems.length === 0 ? (
           <div className="activityEmpty">
-            <h3>No activity yet</h3>
+            <h3>アクティビティなし</h3>
             <p>
-              The live trace will appear here once the model starts calling
-              tools, navigating, and finishing the scenario.
+              モデルがツールを呼び出し、ナビゲートし、シナリオを完了し始めると、ライブトレースがここに表示されます。
             </p>
           </div>
         ) : (
@@ -109,7 +107,7 @@ export function ActivityFeed({
                         }}
                         type="button"
                       >
-                        Frame {linkedFrameIndex + 1}
+                        フレーム {linkedFrameIndex + 1}
                       </button>
                     ) : null}
                     <time className="activityTime">{item.time}</time>

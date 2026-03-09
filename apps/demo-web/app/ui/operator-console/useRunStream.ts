@@ -151,7 +151,7 @@ export function useRunStream({
     : -1;
   const viewingLiveFrame =
     selectedScreenshotIndex >= 0 && selectedScreenshotIndex === screenshots.length - 1;
-  const activityFeedLabel = streamLogs ? "live" : "paused";
+  const activityFeedLabel = streamLogs ? "ライブ" : "一時停止";
 
   function appendManualLog(entry: LogEntry) {
     setManualLogs((current) => [...current.slice(-5), entry]);
@@ -205,8 +205,8 @@ export function useRunStream({
         runDetailSchema,
         undefined,
         createFallbackIssue(
-          `Run detail request failed for ${runId}.`,
-          "Refresh the page or start a new run.",
+          `ラン ${runId} の詳細リクエストに失敗しました。`,
+          "ページを更新するか、新しい実行を開始してください。",
         ),
       ),
     [runnerBaseUrl],
@@ -326,7 +326,7 @@ export function useRunStream({
         appendManualLog(
           createManualLog(
             "event.stream.parse_error",
-            "Runner emitted an invalid SSE payload.",
+            "ランナーが無効な SSE ペイロードを送信しました。",
             "error",
           ),
         );
@@ -380,7 +380,7 @@ export function useRunStream({
       appendManualLog(
         createManualLog(
           "replay.unavailable",
-          "No run has been started for the selected scenario yet.",
+          "選択したシナリオの実行がまだ開始されていません。",
           "warn",
         ),
       );
@@ -422,8 +422,8 @@ export function useRunStream({
           method: "POST",
         },
         createFallbackIssue(
-          "Run start failed.",
-          "Check the runner logs and confirm the scenario request is valid.",
+          "実行の開始に失敗しました。",
+          "ランナーログを確認し、シナリオリクエストが有効であることを確認してください。",
         ),
       );
       const detail = await fetchRunDetail(started.runId);
@@ -435,14 +435,14 @@ export function useRunStream({
         createManualTranscript(
           "control",
           "operator",
-          `Run ${started.runId} started for ${selectedScenario.title}.`,
+          `${selectedScenario.title} のラン ${started.runId} を開始しました。`,
         ),
       );
     } catch (error) {
       const issue = toRunnerIssue(
         error,
-        "Failed to start run.",
-        "Check the runner and scenario configuration, then try again.",
+        "実行の開始に失敗しました。",
+        "ランナーとシナリオの設定を確認してから、もう一度試してください。",
       );
 
       setActionIssue(issue);
@@ -476,8 +476,8 @@ export function useRunStream({
           method: "POST",
         },
         createFallbackIssue(
-          "Run stop failed.",
-          "Refresh the run detail and try stopping the run again.",
+          "実行の停止に失敗しました。",
+          "実行詳細を更新してから、もう一度停止を試みてください。",
         ),
       );
 
@@ -488,14 +488,14 @@ export function useRunStream({
         createManualTranscript(
           "control",
           "operator",
-          `Run ${detail.run.id} stopped by operator request.`,
+          `オペレーターリクエストによりラン ${detail.run.id} を停止しました。`,
         ),
       );
     } catch (error) {
       const issue = toRunnerIssue(
         error,
-        "Failed to stop run.",
-        "Refresh the run detail and try stopping the run again.",
+        "実行の停止に失敗しました。",
+        "実行詳細を更新してから、もう一度停止を試みてください。",
       );
 
       setActionIssue(issue);
@@ -523,8 +523,8 @@ export function useRunStream({
           method: "POST",
         },
         createFallbackIssue(
-          "Workspace reset failed.",
-          "Check the runner logs and try the reset again.",
+          "ワークスペースのリセットに失敗しました。",
+          "ランナーログを確認してから、もう一度リセットを試みてください。",
         ),
       );
 
@@ -533,7 +533,7 @@ export function useRunStream({
       appendManualLog(
         createManualLog(
           "scenario.workspace.reset",
-          `Workspace reset at ${state.workspacePath}`,
+          `ワークスペースを ${state.workspacePath} にリセットしました`,
           "ok",
         ),
       );
@@ -541,7 +541,7 @@ export function useRunStream({
         createManualTranscript(
           "control",
           "runner",
-          `Scenario workspace reset to template baseline at ${state.workspacePath}.`,
+          `シナリオワークスペースを ${state.workspacePath} のテンプレートベースラインにリセットしました。`,
         ),
       );
 
@@ -556,8 +556,8 @@ export function useRunStream({
     } catch (error) {
       const issue = toRunnerIssue(
         error,
-        "Failed to reset workspace.",
-        "Check the runner logs and try the reset again.",
+        "ワークスペースのリセットに失敗しました。",
+        "ランナーログを確認してから、もう一度リセットを試みてください。",
       );
 
       setActionIssue(issue);

@@ -59,19 +59,19 @@ export function ScreenshotPane({
             <p className="reviewEyebrow">
               {selectedScreenshot
                 ? selectedRun?.run.status === "running" && viewingLiveFrame
-                  ? "Live frame"
-                  : "Pinned frame"
+                  ? "ライブフレーム"
+                  : "固定フレーム"
                 : selectedRun
-                  ? "Awaiting frame"
-                  : "Selected app"}
+                  ? "フレーム待機中"
+                  : "選択中のアプリ"}
             </p>
             <h3>
               {selectedScreenshot
                 ? selectedScreenshot.pageTitle?.trim() ||
                   humanizeToken(selectedScreenshot.label)
                 : selectedRun
-                  ? "Browser capture pending"
-                  : "Ready to review"}
+                  ? "ブラウザキャプチャ待機中"
+                  : "レビュー準備完了"}
             </h3>
             {!selectedScreenshot ? <p>{emptyReviewMessage}</p> : null}
           </div>
@@ -79,7 +79,7 @@ export function ScreenshotPane({
             {selectedScreenshot ? (
               <>
                 <span className="readoutChip">
-                  Frame {selectedScreenshotIndex + 1} / {screenshotCount}
+                  フレーム {selectedScreenshotIndex + 1} / {screenshotCount}
                 </span>
                 <span className="readoutChip">
                   {formatClock(selectedScreenshot.capturedAt)}
@@ -92,7 +92,7 @@ export function ScreenshotPane({
                 ) : null}
               </>
             ) : (
-              <span className="readoutChip">No frames yet</span>
+              <span className="readoutChip">フレームなし</span>
             )}
           </div>
         </div>
@@ -102,13 +102,13 @@ export function ScreenshotPane({
             // Replay frames come from the runner's artifact endpoint, so Next image optimization is not a fit here.
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              alt={`Captured frame ${selectedScreenshotIndex + 1} for ${selectedScenarioTitle}`}
+              alt={`${selectedScenarioTitle} のキャプチャフレーム ${selectedScreenshotIndex + 1}`}
               className="stageScreenshot"
               src={`${runnerBaseUrl}${selectedScreenshot.url}`}
             />
           ) : (
             <div className="stagePlaceholder">
-              <h3>{selectedRun ? "Waiting for first frame" : "Ready to capture"}</h3>
+              <h3>{selectedRun ? "最初のフレーム待機中" : "キャプチャ準備完了"}</h3>
               <p>{emptyReviewMessage}</p>
             </div>
           )}
@@ -117,13 +117,13 @@ export function ScreenshotPane({
         <div className={`scrubberPanel ${screenshots.length === 0 ? "isEmpty" : ""}`}>
           <div className="scrubberRow">
             <div className="scrubberCopy">
-              <h4>Review timeline</h4>
+              <h4>タイムラインを確認</h4>
               <p>
                 {screenshots.length === 0
                   ? emptyTimelineMessage
                   : viewingLiveFrame && selectedRun?.run.status === "running"
-                    ? "Following the latest capture as the run progresses."
-                    : "Scrub across captured browser frames and inspect the exact state the model saw."}
+                    ? "実行中は最新のキャプチャを追跡しています。"
+                    : "キャプチャされたブラウザフレームをスクラブして、モデルが見た正確な状態を確認します。"}
               </p>
             </div>
             <div className="scrubberActions">
@@ -133,7 +133,7 @@ export function ScreenshotPane({
                   onClick={onJumpToLatestScreenshot}
                   type="button"
                 >
-                  Jump to latest
+                  最新へジャンプ
                 </button>
               ) : null}
               <button
@@ -142,7 +142,7 @@ export function ScreenshotPane({
                 onClick={onOpenReplay}
                 type="button"
               >
-                Replay JSON
+                リプレイ JSON
               </button>
             </div>
           </div>
@@ -150,7 +150,7 @@ export function ScreenshotPane({
           <div className="scrubberRangeRow">
             <span className="scrubberCount">{screenshots.length > 0 ? 1 : 0}</span>
             <input
-              aria-label="Captured frame scrubber"
+              aria-label="キャプチャフレームスクラバー"
               className="scrubberRange"
               disabled={screenshots.length <= 1}
               max={Math.max(0, screenshots.length - 1)}
@@ -179,12 +179,12 @@ export function ScreenshotPane({
                   {/* Filmstrip thumbnails also come from dynamic replay artifacts served by the runner. */}
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    alt={`Frame ${index + 1}`}
+                    alt={`フレーム ${index + 1}`}
                     className="filmstripThumb"
                     src={`${runnerBaseUrl}${screenshot.url}`}
                   />
                   <span className="filmstripMeta">
-                    <span className="filmstripTitle">Frame {index + 1}</span>
+                    <span className="filmstripTitle">フレーム {index + 1}</span>
                     <span className="filmstripTime">
                       {formatClock(screenshot.capturedAt)}
                     </span>
@@ -194,7 +194,7 @@ export function ScreenshotPane({
             ) : (
               <div className="filmstripPlaceholder">
                 <span className="filmstripPlaceholderTitle">
-                  Timeline waiting for captures
+                  キャプチャ待機中
                 </span>
                 <span className="filmstripPlaceholderText">
                   {emptyTimelineMessage}

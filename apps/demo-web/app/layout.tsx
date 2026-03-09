@@ -4,9 +4,9 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "GPT-5.4 CUA Sample App",
+  title: "GPT-5.4 CUA サンプルアプリ",
   description:
-    "Scenario-driven sample app for GPT-5.4 computer-use workflows.",
+    "GPT-5.4 コンピューター操作ワークフローのシナリオ駆動型サンプルアプリ。",
 };
 
 type RootLayoutProps = {
@@ -15,7 +15,7 @@ type RootLayoutProps = {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en">
+    <html lang="ja">
       <body>{children}</body>
     </html>
   );
